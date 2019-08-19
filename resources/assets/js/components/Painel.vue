@@ -21,7 +21,7 @@
 <style scoped>
     .panel {
         overflow: hidden;
-        margin: 1rem 0;
+        margin: 0;
         transition: box-shadow .25s, -webkit-box-shadow .25s;
         border-radius: 2px;
         background-color: #fff;

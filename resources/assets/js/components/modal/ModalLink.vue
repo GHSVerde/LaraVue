@@ -1,22 +1,27 @@
 <template>
-    <a v-bind:class="defineCor" v-bind:href="url">
-        <i v-bind:class="icone"></i> {{ texto }}
-    </a>
+    <div>
+        <button v-if="tipo == 'button'" type="button" v-bind:class="css || 'btn'" data-toggle="modal"
+                v-bind:data-target="'#'+nome"> <i v-bind:class="icone"></i> {{ titulo }}
+        </button>
+        <button v-if="!tipo || (tipo != 'button' && tipo != 'link')" type="button" v-bind:class="css || 'btn'" data-toggle="modal"
+                v-bind:data-target="'#'+nome"> <i v-bind:class="icone"></i> {{ titulo }}
+        </button>
+        <a v-if="tipo == 'link'" data-toggle="modal" v-bind:class="css || ''" v-bind:data-target="'#'+nome"><i v-bind:class="icone"></i> {{ titulo }}</a>
+    </div>
 </template>
 
 <script>
     export default {
-        props: ['url', "texto", "icone", 'cor'],
-        computed: {
-            defineCor: function () {
-                return "btn " + this.cor;
-            }
-        },
-        name: "LargeBtn"
+        props: ['tipo', 'nome', 'titulo', 'css', 'icone']
     }
 </script>
 
 <style scoped>
+
+    .btn:focus {
+        outline: 0;
+    }
+
     .btn {
         color: #fff;
         margin-bottom: .5rem;
@@ -126,4 +131,5 @@
     .dark-gray:hover {
         background-color: #23272b;
     }
+
 </style>

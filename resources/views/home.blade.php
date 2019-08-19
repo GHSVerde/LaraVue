@@ -5,6 +5,7 @@
 
                 <pagina tamanho="10">
                     <painel titulo="Dashboard">
+                        <breadcrumb v-bind:lista="{{ $listaBreadcrumb }}"></breadcrumb>
                         <div class="row">
                             <div class="col-md-4">
                                 <caixa qtd="80" titulo="Artigos" url="{{ route('artigos.index') }}" cor="#ffc107" icone="ion ion-ios-paper"></caixa>

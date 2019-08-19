@@ -1,7 +1,8 @@
 <template>
     <div>
         <div class="form-inline">
-            <btn v-if="criar" cor="green" v-bind:url="criar" texto="Criar" icone="ion ion-android-add"></btn>
+            <modallink v-if="criar" nome="meuModalTeste" titulo="Criar" css="btn green" icone="ion ion-android-add"></modallink>
+<!--            <btn v-if="criar" cor="green" v-bind:url="criar" texto="Criar" icone="ion ion-android-add"></btn>-->
             <div class="form-group pull-right">
                 <input type="search" class="form-control" placeholder="Buscar" v-model="buscar">
             </div>
@@ -10,12 +11,12 @@
         <table class="table table-hover">
             <thead>
             <tr>
-                <th v-for="titulo in titulos">{{ titulo }}</th>
+                <th style="cursor: pointer" v-on:click="ordenaColuna(index)" v-for="(titulo, index) in titulos">{{ titulo }}</th>
                 <th v-if="detalhe || editar || deletar">Ações</th>
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(item, index) in itens">
+            <tr v-for="(item, index) in lista">
                 <td v-for="i in item">{{ i }}</td>
                 <td v-if="detalhe || editar || deletar">
                     <form v-bind:id="index" v-if="deletar && token" v-bind:action="deletar" method="post">
@@ -45,17 +46,65 @@
 
 <script>
     export default {
-        props: ['titulos', 'itens', 'criar', 'detalhe', 'editar', 'deletar', 'token'],
+        props: ['titulos', 'itens', 'criar', 'detalhe', 'editar', 'deletar', 'token', 'ordem', 'ordemCol'],
+        data: function () {
+            return {
+                buscar: '',
+                ordemAux: this.ordem || "asc",
+                ordemAuxCol: this.ordemCol || 0
+            }
+        },
 
         methods: {
             executaForm: function(index) {
                 document.getElementById(index).submit();
+            },
+
+            ordenaColuna: function(coluna) {
+                this.ordemAuxCol = coluna;
+                this.ordemAux = (this.ordemAux.toLowerCase() == "asc") ? 'desc' : 'asc';
+            }
+        },
+        computed: {
+            lista: function() {
+
+                let ordem = this.ordemAux; // Se for definido pega o valor, asc padrão
+                let ordemCol = this.ordemAuxCol; // Mesma coisa de cima
+                ordem = ordem.toLowerCase(); // Transforma em lowercase
+                ordemCol = parseInt(ordemCol); //Transforma em int
+
+                if (ordem == "asc") { //Se a ordem for crescente, aplica o método responsável
+                    this.itens.sort(function (a, b) {
+                        if (a[ordemCol] > b[ordemCol]) { return 1; }
+                        if (a[ordemCol] < b[ordemCol]) { return -1; }
+                        return 0;
+                    });
+                } else { //Se não for, aplica decrescente
+                    this.itens.sort(function (a, b) {
+                        if (a[ordemCol] < b[ordemCol]) { return 1; }
+                        if (a[ordemCol] > b[ordemCol]) { return -1; }
+                        return 0;
+                    });
+                }
+
+                //Retorna um filtro dos itens
+                return this.itens.filter( res => {
+                    for( let k = 0; k < res.length; k++) { // Loop enquanto tiver itens
+                        if ( (res[k] + '').toLowerCase().indexOf(this.buscar.toLowerCase()) >= 0) { // Transforma a pesquisa e os itens em lowercase e testa se são iguais
+                            return true;
+                        }
+                    }
+                    return false; //Retorna falso se não for do loop
+                } );
+
+                return this.itens;
             }
         }
     }
 </script>
 
 <style scoped>
+
     .btn {
         color: #fff;
         margin-bottom: .5rem;
