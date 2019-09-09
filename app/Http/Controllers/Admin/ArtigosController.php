@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Artigo;
 
 class ArtigosController extends Controller
 {
@@ -18,7 +19,9 @@ class ArtigosController extends Controller
             ["titulo" => "Home", "url" => route('home')],
             ["titulo" => "Lista de Artigos", "url" => ""]
         ]);
-        return view('admin.artigos.index', compact('listaBreadcrumb'));
+
+        $listaArtigos =  json_encode(Artigo::select('id', 'titulo', 'descricao', 'data')->get());
+        return view('admin.artigos.index', compact('listaBreadcrumb','listaArtigos'));
     }
 
     /**
@@ -39,7 +42,22 @@ class ArtigosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all(); //Recupera Dados
+
+        //Validação de Dados
+        $validacao = \Validator::make($data, [
+            "titulo"    => "required",
+            "descricao" => "required",
+            "conteudo"  => "required",
+            "data"      => "required"
+        ]);
+
+        if ($validacao->fails()) { // Se a calidação falhar
+            return redirect()->back()->withErrors($validacao)->withInput();// Retorna pra página anterior com os erros e os inputs
+        }
+
+        Artigo::create($data); // Salva os dados no BD
+        return redirect()->back(); // Volta para a página anterior
     }
 
     /**
@@ -50,7 +68,7 @@ class ArtigosController extends Controller
      */
     public function show($id)
     {
-        //
+        return Artigo::find($id);
     }
 
     /**
@@ -73,7 +91,22 @@ class ArtigosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->all(); //Recupera Dados
+
+        //Validação de Dados
+        $validacao = \Validator::make($data, [
+            "titulo"    => "required",
+            "descricao" => "required",
+            "conteudo"  => "required",
+            "data"      => "required"
+        ]);
+
+        if ($validacao->fails()) { // Se a calidação falhar
+            return redirect()->back()->withErrors($validacao)->withInput();// Retorna pra página anterior com os erros e os inputs
+        }
+
+        Artigo::find($id)->update($data); // Salva os dados no BD
+        return redirect()->back(); // Volta para a página anterior
     }
 
     /**
@@ -84,6 +117,7 @@ class ArtigosController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Artigo::find($id)->delete();
+        return redirect()->back();
     }
 }

@@ -2,41 +2,84 @@
 
 @section('content')
     <pagina tamanho="12">
+
+        @if($errors->all())
+            <div class="alert alert-danger alert-dismissable" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                @foreach($errors->all() as $key => $value)
+                    <p>{{ $value }}</p>
+                @endforeach
+            </div>
+        @endif
+
         <painel titulo="Lista de Artigos">
             <breadcrumb v-bind:lista="{{ $listaBreadcrumb }}"></breadcrumb>
             <tabela-lista
-                    v-bind:titulos="['ID', 'Título', 'Descrição']"
-                    v-bind:itens="[[1, 'PHP OO', 'PHP OO'], [2, 'The Mistakes I Made as a Beginner Programmer', 'Learn to Identify them, make habits to avoid them']]"
-                    detalhe="#Detalhe" criar="#Criar" editar="#Editar" deletar="#Deletar" token="827398173872"
-                    ordem="desc" ordem-col="1"
+                    v-bind:titulos="['ID', 'Título', 'Descrição', 'Data']"
+                    v-bind:itens="{{ $listaArtigos }}"
+                    detalhe="/admin/artigos/" criar="#Criar" editar="/admin/artigos/" deletar="/admin/artigos/" token="{{ csrf_token() }}"
+                    ordem="asc" ordem-col="1" modal="1"
             ></tabela-lista>
         </painel>
     </pagina>
 
 
-    <modal nome="meuModalTeste">
-        <painel titulo="teste">
-            <form>
+    <modal nome="adicionar" titulo="Adicionar">
+            <formulario id="formAdicionar" css="" action="{{ route('artigos.store') }}" method="post" enctype="" token="{{ csrf_token() }}">
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Email address</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputPassword1">Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    <label for="titulo">Título</label>
+                    <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Título" value="{{ old('titulo') }}">
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputFile">File input</label>
-                    <input type="file" id="exampleInputFile">
-                    <p class="help-block">Example block-level help text here.</p>
+                    <label for="descricao">Descrição</label>
+                    <input type="text" class="form-control" id="descricao" name="descricao" placeholder="Descrição" value="{{ old('descricao') }}">
                 </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox"> Check me out
-                    </label>
+
+                <div class="form-group">
+                    <label for="conteudo">Conteúdo</label>
+                    <textarea class="form-control" id="conteudo" name="conteudo" placeholder="Conteúdo">{{ old('conteudo') }}</textarea>
                 </div>
-                <button type="submit" class="btn btn-default">Submit</button>
-            </form>
-        </painel>
+
+                <div class="form-group">
+                    <label for="data">Data</label>
+                    <input type="datetime-local" class="form-control" id="data" name="data" value="{{ old('data') }}">
+                </div>
+
+
+            </formulario>
+        <span slot="botoes"><button form="formAdicionar" class="btn btn-info">Adicionar</button></span>
+
+
+    </modal>
+    <modal nome="editar" titulo="Editar">
+            <formulario id="formEditar" css="" :action=' "/admin/artigos/" + $store.state.item.id' method="put" enctype="" token="{{ csrf_token() }}">
+                <div class="form-group">
+                    <label for="titulo">Título</label>
+                    <input type="text" class="form-control" id="titulo" v-model="$store.state.item.titulo" name="titulo" placeholder="Título">
+                </div>
+                <div class="form-group">
+                    <label for="descricao">Descrição</label>
+                    <input type="text" class="form-control" id="descricao" v-model="$store.state.item.descricao" name="descricao" placeholder="Descrição">
+                </div>
+                <div class="form-group">
+                    <label for="descricao">Conteúdo</label>
+                    <textarea class="form-control" id="conteudo" name="conteudo" placeholder="Conteúdo" v-model="$store.state.item.conteudo"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="data">Data</label>
+                    <input type="datetime-local" class="form-control" id="data" name="data" v-model="$store.state.item.data" >
+                </div>
+
+
+            </formulario>
+        <slot slot="botoes"><button form="formEditar" class="btn btn-info">Salvar</button></slot>
+
+    </modal>
+    <modal nome="detalhe" titulo="Visualizar">
+
+        <h3>@{{ $store.state.item.titulo }}</h3>
+        <p><b>Descrição</b><br>@{{ $store.state.item.descricao }}</p>
+        <p><b>Conteúdo</b><br>@{{ $store.state.item.conteudo }}</p>
+        <p><b>Data</b><br>@{{ $store.state.item.data }}</p>
     </modal>
 @endsection
