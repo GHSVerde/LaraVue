@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\User;
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Artigo;
 
-class ArtigosController extends Controller
+class UsuariosController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,11 +18,11 @@ class ArtigosController extends Controller
     {
         $listaBreadcrumb = json_encode([
             ["titulo" => "Home", "url" => route('home')],
-            ["titulo" => "Lista de Artigos", "url" => ""]
+            ["titulo" => "Lista de Usuários", "url" => ""]
         ]);
 
-        $listaArtigos =  Artigo::select('id', 'titulo', 'descricao', 'data')->paginate(10);
-        return view('admin.artigos.index', compact('listaBreadcrumb','listaArtigos'));
+        $listaModelo =  User::select('id', 'name', 'email')->paginate(10);
+        return view('admin.usuarios.index', compact('listaBreadcrumb','listaModelo'));
     }
 
     /**
@@ -46,17 +47,18 @@ class ArtigosController extends Controller
 
         //Validação de Dados
         $validacao = \Validator::make($data, [
-            "titulo"    => "required",
-            "descricao" => "required",
-            "conteudo"  => "required",
-            "data"      => "required"
+            "name"     => 'required|string|max:255',
+            "email"    => 'required|string|max:255|unique:users',
+            'password' => 'required|string|min:6',
         ]);
 
         if ($validacao->fails()) { // Se a calidação falhar
             return redirect()->back()->withErrors($validacao)->withInput();// Retorna pra página anterior com os erros e os inputs
         }
 
-        Artigo::create($data); // Salva os dados no BD
+        $data['password'] = bcrypt($data['password']);
+
+        User::create($data); // Salva os dados no BD
         return redirect()->back(); // Volta para a página anterior
     }
 
@@ -68,7 +70,7 @@ class ArtigosController extends Controller
      */
     public function show($id)
     {
-        return Artigo::find($id);
+        return User::find($id);
     }
 
     /**
@@ -91,21 +93,21 @@ class ArtigosController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         $data = $request->all(); //Recupera Dados
 
         //Validação de Dados
         $validacao = \Validator::make($data, [
-            "titulo"    => "required",
-            "descricao" => "required",
-            "conteudo"  => "required",
-            "data"      => "required"
+            "name"     => 'required|string|max:255',
+            "email"    => 'required|string|max:255|unique:users',
+            'password' => 'required|string|min:6',
         ]);
 
         if ($validacao->fails()) { // Se a calidação falhar
             return redirect()->back()->withErrors($validacao)->withInput();// Retorna pra página anterior com os erros e os inputs
         }
 
-        Artigo::find($id)->update($data); // Salva os dados no BD
+        User::find($id)->update($data); // Salva os dados no BD
         return redirect()->back(); // Volta para a página anterior
     }
 
@@ -117,7 +119,7 @@ class ArtigosController extends Controller
      */
     public function destroy($id)
     {
-        Artigo::find($id)->delete();
+        User::find($id)->delete();
         return redirect()->back();
     }
 }

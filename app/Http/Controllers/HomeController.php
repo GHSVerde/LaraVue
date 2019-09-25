@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Artigo;
+use App\User;
 
 class HomeController extends Controller
 {
@@ -26,6 +28,8 @@ class HomeController extends Controller
         $listaBreadcrumb = json_encode([
             ['titulo' => 'Home', 'url' =>""]
         ]);
-        return view('home', compact('listaBreadcrumb'));
+        $artigos = Artigo::select()->count('*');
+        $usuarios = User::select()->count('*');
+        return view('home', compact('listaBreadcrumb', 'artigos', 'usuarios'));
     }
 }

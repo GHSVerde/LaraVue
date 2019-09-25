@@ -79,20 +79,21 @@
         },
         computed: {
             lista: function() {
-
+                console.log(this.itens);
+                let lista = this.itens.data;
                 let ordem = this.ordemAux; // Se for definido pega o valor, asc padrão
                 let ordemCol = this.ordemAuxCol; // Mesma coisa de cima
                 ordem = ordem.toLowerCase(); // Transforma em lowercase
                 ordemCol = parseInt(ordemCol); //Transforma em int
 
                 if (ordem == "asc") { //Se a ordem for crescente, aplica o método responsável
-                    this.itens.sort(function (a, b) {
+                    lista.sort(function (a, b) {
                         if (Object.values(a)[ordemCol] > Object.values(b)[ordemCol]) { return 1; }
                         if (Object.values(a)[ordemCol] < Object.values(b)[ordemCol]) { return -1; }
                         return 0;
                     });
                 } else { //Se não for, aplica decrescente
-                    this.itens.sort(function (a, b) {
+                    lista.sort(function (a, b) {
                         if (Object.values(a)[ordemCol] < Object.values(b)[ordemCol]) { return 1; }
                         if (Object.values(a)[ordemCol] > Object.values(b)[ordemCol]) { return -1; }
                         return 0;
@@ -101,7 +102,7 @@
 
                 if(this.buscar) {
                     //Retorna um filtro dos itens
-                    return this.itens.filter( res => {
+                    return lista.filter( res => {
                         res = Object.values(res);
                         for( let k = 0; k < res.length; k++) { // Loop enquanto tiver itens
                             if ( (res[k] + '').toLowerCase().indexOf(this.buscar.toLowerCase()) >= 0) { // Transforma a pesquisa e os itens em lowercase e testa se são iguais
@@ -113,7 +114,7 @@
                 }
 
 
-                return this.itens;
+                return lista;
             }
         }
     }
