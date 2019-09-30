@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\User;
-
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Validation\Rule;
 
-class UsuariosController extends Controller
+class AutoresController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,11 +18,11 @@ class UsuariosController extends Controller
     {
         $listaBreadcrumb = json_encode([
             ["titulo" => "Home", "url" => route('home')],
-            ["titulo" => "Lista de Usuários", "url" => ""]
+            ["titulo" => "Lista de Autores", "url" => ""],
         ]);
 
-        $listaModelo =  User::select('id', 'name', 'email')->paginate(10);
-        return view('admin.usuarios.index', compact('listaBreadcrumb','listaModelo'));
+        $listaModelo =  User::select('id', 'name', 'email')->where('autor', '=', 'S')->paginate(10);
+        return view('admin.autores.index', compact('listaBreadcrumb','listaModelo'));
     }
 
     /**
@@ -94,7 +93,6 @@ class UsuariosController extends Controller
      */
     public function update(Request $request, $id)
     {
-
         $data = $request->all(); //Recupera Dados
 
         if (isset($data['password']) && $data['password'] != "" ) {

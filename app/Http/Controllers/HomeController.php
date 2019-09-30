@@ -28,8 +28,9 @@ class HomeController extends Controller
         $listaBreadcrumb = json_encode([
             ['titulo' => 'Home', 'url' =>""]
         ]);
-        $artigos = Artigo::select()->count('*');
+        $artigos  = Artigo::select()->count('*');
         $usuarios = User::select()->count('*');
-        return view('home', compact('listaBreadcrumb', 'artigos', 'usuarios'));
+        $autores  = User::select()->where('autor', '=', 'S')->count('*');
+        return view('home', compact('listaBreadcrumb', 'artigos', 'usuarios', 'autores'));
     }
 }
