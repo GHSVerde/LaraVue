@@ -2,7 +2,6 @@
 
 @section('content')
 
-
                 <pagina tamanho="10">
                     <painel titulo="Dashboard">
                         <breadcrumb v-bind:lista="{{ $listaBreadcrumb }}"></breadcrumb>
@@ -19,4 +18,5 @@
                         </div>
                     </painel>
                 </pagina>
+                
 @endsection
