@@ -38,8 +38,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="conteudo">Conteúdo</label>
-                    <textarea class="form-control" id="conteudo" name="conteudo" placeholder="Conteúdo">{{ old('conteudo') }}</textarea>
+                    <label for="addConteudo">Conteúdo</label>
+                    <textarea class="ckeditor form-control" id="conteudo" name="conteudo" placeholder="Conteúdo">{{ old('conteudo') }}</textarea>
                 </div>
 
                 <div class="form-group">
@@ -65,7 +65,7 @@
                 </div>
                 <div class="form-group">
                     <label for="descricao">Conteúdo</label>
-                    <textarea class="form-control" id="conteudo" name="conteudo" placeholder="Conteúdo" v-model="$store.state.item.conteudo"></textarea>
+                    <textarea class="ckeditor form-control" id="conteudo" name="conteudo" placeholder="Conteúdo" v-model="$store.state.item.conteudo"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="data">Data</label>
@@ -81,7 +81,8 @@
 
         <h3>@{{ $store.state.item.titulo }}</h3>
         <p><b>Descrição</b><br>@{{ $store.state.item.descricao }}</p>
-        <p><b>Conteúdo</b><br>@{{ $store.state.item.conteudo }}</p>
+        <p><b>Conteúdo</b><br></p>
+        <div>@{{ $store.state.item.conteudo }}</div>
         <p><b>Data</b><br>@{{ $store.state.item.data }}</p>
     </modal>
 @endsection

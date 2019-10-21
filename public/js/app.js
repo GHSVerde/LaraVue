@@ -1600,6 +1600,7 @@ Vue.component('breadcrumb', __webpack_require__(72));
 Vue.component('modal', __webpack_require__(77));
 Vue.component('modallink', __webpack_require__(82));
 Vue.component('formulario', __webpack_require__(87));
+// Vue.component('ckeditor', require('ckeditor5-vue'));
 
 var app = new Vue({
     el: '#app',

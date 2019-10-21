@@ -49,6 +49,8 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    <script src="../vendor/unisharp/laravel-ckeditor/ckeditor.js"></script>
+    {{-- <script> $('.ckeditor').ckeditor();</script> --}}
     <script src="https://kit.fontawesome.com/475529c7e8.js"></script>
 
 </body>

@@ -22,6 +22,7 @@ class Artigo extends Model
         $listaArtigos = \DB::table('artigos')
             ->join('users', 'users.id', '=', 'artigos.user_id')
             ->select('artigos.id', 'artigos.titulo', 'artigos.descricao', 'users.name', 'artigos.data')
+            ->whereNull('deleted_at')
             ->paginate($paginate);
 
         return $listaArtigos;
