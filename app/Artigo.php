@@ -18,11 +18,12 @@ class Artigo extends Model
     }
 
     public static function listaArtigos($paginate) {
+        
         $listaArtigos = \DB::table('artigos')
             ->join('users', 'users.id', '=', 'artigos.user_id')
             ->select('artigos.id', 'artigos.titulo', 'artigos.descricao', 'users.name', 'artigos.data')
             ->paginate($paginate);
 
-    return $listaArtigos;
+        return $listaArtigos;
     }
 }

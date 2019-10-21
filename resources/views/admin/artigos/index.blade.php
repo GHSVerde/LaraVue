@@ -12,6 +12,7 @@
             </div>
         @endif
 
+        
         <painel titulo="Lista de Artigos">
             <breadcrumb v-bind:lista="{{ $listaBreadcrumb }}"></breadcrumb>
             <tabela-lista
