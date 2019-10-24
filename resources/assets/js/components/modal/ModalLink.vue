@@ -30,6 +30,16 @@
             preencheFormulario: function () {
                 axios.get(this.url+this.item.id).then(res => {
                     this.$store.commit('setItem', res.data);
+
+for(name in CKEDITOR.instances)
+                {
+                    CKEDITOR.instances[name].destroy()
+                    }
+                    
+                    CKEDITOR.replace('conteudoEditar');
+                    CKEDITOR.replace('conteudoAdd');
+                    // document.getElementById('conteudoEditar').value = res.data.conteudo;
+                    // CKEDITOR.replace('conteudoEditar');
                 });
             }
         }

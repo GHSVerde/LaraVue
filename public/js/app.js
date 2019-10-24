@@ -47878,6 +47878,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             axios.get(this.url + this.item.id).then(function (res) {
                 _this.$store.commit('setItem', res.data);
+
+                for (name in CKEDITOR.instances) {
+                    CKEDITOR.instances[name].destroy();
+                }
+
+                CKEDITOR.replace('conteudoEditar');
+                CKEDITOR.replace('conteudoAdd');
+                // document.getElementById('conteudoEditar').value = res.data.conteudo;
+                // CKEDITOR.replace('conteudoEditar');
             });
         }
     }
