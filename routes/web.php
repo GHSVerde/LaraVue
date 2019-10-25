@@ -11,10 +11,10 @@
 |
 */
 
-Route::view('/', 'welcome');
+Route::view('/', 'site');
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/admin', 'AdminController@index')->name('admin');
 
 Route::prefix('admin')->namespace('Admin')->middleware('auth')->group(function() {
     Route::resource('artigos', 'ArtigosController');

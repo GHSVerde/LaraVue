@@ -16,7 +16,7 @@ class ArtigosController extends Controller
     public function index()
     {
         $listaBreadcrumb = json_encode([
-            ["titulo" => "Home", "url" => route('home')],
+            ["titulo" => "Admin", "url" => route('admin')],
             ["titulo" => "Lista de Artigos", "url" => ""]
         ]);
         

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Artigo;
 use App\User;
 
-class HomeController extends Controller
+class AdminController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -26,11 +26,11 @@ class HomeController extends Controller
     public function index()
     {
         $listaBreadcrumb = json_encode([
-            ['titulo' => 'Home', 'url' =>""]
+            ['titulo' => 'Admin', 'url' =>""]
         ]);
         $artigos  = Artigo::select()->count('*');
         $usuarios = User::select()->count('*');
         $autores  = User::select()->where('autor', '=', 'S')->count('*');
-        return view('home', compact('listaBreadcrumb', 'artigos', 'usuarios', 'autores'));
+        return view('admin', compact('listaBreadcrumb', 'artigos', 'usuarios', 'autores'));
     }
 }
