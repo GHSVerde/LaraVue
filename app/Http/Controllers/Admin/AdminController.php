@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Artigo;
+use Illuminate\Validation\Rule;
 
-class ArtigosController extends Controller
+class AdminController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,14 +18,13 @@ class ArtigosController extends Controller
     {
         $listaBreadcrumb = json_encode([
             ["titulo" => "Admin", "url" => route('admin')],
-            ["titulo" => "Lista de Artigos", "url" => ""]
+            ["titulo" => "Lista de Admin", "url" => ""],
         ]);
-        
-        
-        $listaArtigos = Artigo::listaArtigos(5);
-        return view('admin.artigos.index', compact('listaBreadcrumb','listaArtigos'));
+
+        $listaModelo =  User::select('id', 'name', 'email')->where('admin', '=', 'S')->paginate(10);
+        return view('admin.adm.index', compact('listaBreadcrumb','listaModelo'));
     }
-    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -47,21 +47,18 @@ class ArtigosController extends Controller
 
         //Validação de Dados
         $validacao = \Validator::make($data, [
-            "titulo"    => "required",
-            "descricao" => "required",
-            "conteudo"  => "required",
-            "data"      => "required",
-
+            "name"     => 'required|string|max:255',
+            "email"    => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6',
         ]);
 
         if ($validacao->fails()) { // Se a calidação falhar
             return redirect()->back()->withErrors($validacao)->withInput();// Retorna pra página anterior com os erros e os inputs
         }
 
-        // Salva os dados no BD
-        $user = auth()->user();
-        $user->artigos()->create($data);
-        
+        $data['password'] = bcrypt($data['password']);
+
+        User::create($data); // Salva os dados no BD
         return redirect()->back(); // Volta para a página anterior
     }
 
@@ -73,7 +70,7 @@ class ArtigosController extends Controller
      */
     public function show($id)
     {
-        return Artigo::find($id);
+        return User::find($id);
     }
 
     /**
@@ -98,20 +95,28 @@ class ArtigosController extends Controller
     {
         $data = $request->all(); //Recupera Dados
 
-        //Validação de Dados
-        $validacao = \Validator::make($data, [
-            "titulo"    => "required",
-            "descricao" => "required",
-            "conteudo"  => "required",
-            "data"      => "required"
-        ]);
+        if (isset($data['password']) && $data['password'] != "" ) {
+            //Validação de Dados
+            $validacao = \Validator::make($data, [
+                "name"     => 'required|string|max:255',
+                'email'    => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($id)],
+                'password' => 'required|string|min:6',
+            ]);
+
+            $data['password'] = bcrypt($data['password']);
+        } else {
+            $validacao = \Validator::make($data, [
+                "name"     => 'required|string|max:255',
+                'email'    => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($id)],
+            ]);
+            unset($data['password']);
+        }
 
         if ($validacao->fails()) { // Se a calidação falhar
             return redirect()->back()->withErrors($validacao)->withInput();// Retorna pra página anterior com os erros e os inputs
         }
 
-        $user = auth()->user();
-        $user->artigos()->find($id)->update($data); // Salva os dados no BD
+        User::find($id)->update($data); // Salva os dados no BD
         return redirect()->back(); // Volta para a página anterior
     }
 
@@ -123,7 +128,7 @@ class ArtigosController extends Controller
      */
     public function destroy($id)
     {
-        Artigo::find($id)->delete();
+        User::find($id)->delete();
         return redirect()->back();
     }
 }

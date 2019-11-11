@@ -1,6 +1,6 @@
 <template>
     <div v-bind:class="defineCor">
-        <div class="panel-heading">{{ titulo }}</div>
+        <div class="panel-heading" v-if='titulo'>{{ titulo }}</div>
         <div class="panel-body">
             <slot></slot>
         </div>

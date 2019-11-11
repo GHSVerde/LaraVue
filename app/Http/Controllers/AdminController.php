@@ -31,6 +31,7 @@ class AdminController extends Controller
         $artigos  = Artigo::select()->count('*');
         $usuarios = User::select()->count('*');
         $autores  = User::select()->where('autor', '=', 'S')->count('*');
-        return view('admin', compact('listaBreadcrumb', 'artigos', 'usuarios', 'autores'));
+        $admin    = User::select()->where('admin', '=', 'S')->count('*');
+        return view('admin', compact('listaBreadcrumb', 'artigos', 'usuarios', 'autores', 'admin'));
     }
 }

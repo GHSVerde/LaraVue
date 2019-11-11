@@ -27,4 +27,32 @@ class Artigo extends Model
 
         return $listaArtigos;
     }
+
+    public static function listaArtigosSite($paginate, $busca = null) {
+        
+
+        if(isset($busca)) {
+
+        $listaArtigos = \DB::table('artigos')
+        ->join('users', 'users.id', '=', 'artigos.user_id')
+        ->select('artigos.id', 'artigos.titulo', 'artigos.descricao', 'users.name as autor', 'artigos.data')
+        ->whereDate('data', '<=', date('Y-m-d'))
+        ->where(function($query) use ($busca) {
+            $query->orWhere('titulo','like','%'.$busca.'%')->orWhere('descricao','like','%'.$busca.'%');
+        })
+        ->orderBy('data', 'desc')
+        ->whereNull('deleted_at')
+        ->paginate($paginate);
+        } else {
+
+        $listaArtigos = \DB::table('artigos')
+            ->join('users', 'users.id', '=', 'artigos.user_id')
+            ->select('artigos.id', 'artigos.titulo', 'artigos.descricao', 'users.name as autor', 'artigos.data')
+            ->whereDate('data', '<=', date('Y-m-d'))
+            ->orderBy('data', 'desc')
+            ->whereNull('deleted_at')
+            ->paginate($paginate);
+        }
+        return $listaArtigos;
+    }
 }

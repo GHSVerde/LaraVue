@@ -12,14 +12,15 @@
             </div>
         @endif
 
-        <painel titulo="Lista de Usuários">
+        <painel titulo="Lista de Admin">
 
             {{ $listaModelo }}
             <breadcrumb v-bind:lista="{{ $listaBreadcrumb }}"></breadcrumb>
             <tabela-lista
                     v-bind:titulos="['ID', 'Nome', 'E-mail']"
                     v-bind:itens="{{ json_encode($listaModelo) }}"
-                    detalhe="/admin/usuarios/" criar="#Criar" editar="/admin/usuarios/" deletar="/admin/usuarios/" token="{{ csrf_token() }}"
+                    detalhe="/admin/adm/" criar="#Criar"
+                    editar="/admin/adm/"
                     ordem="asc" ordem-col="1" modal="1"
             ></tabela-lista>
             <div align="right"> {{ $listaModelo }}</div>
@@ -28,7 +29,7 @@
 
 
     <modal nome="adicionar" titulo="Adicionar">
-            <formulario id="formAdicionar" css="" action="{{ route('usuarios.store') }}" method="post" enctype="" token="{{ csrf_token() }}">
+            <formulario id="formAdicionar" css="" action="{{ route('adm.store') }}" method="post" enctype="" token="{{ csrf_token() }}">
                 <div class="form-group">
                     <label for="titulo">Nome</label>
                     <input type="text" class="form-control" id="name" name="name" placeholder="Nome" value="{{ old('name') }}">
@@ -39,20 +40,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="autor">Autor</label>
-                    <select name="autor" id="autor" class="form-control">
-                        <option {{ (old('autor') && old('autor')) == 'N' ? 'selected' : ''}} value="N">Não</option>
-                        <option {{ (old('autor') && old('autor')) == 'S' ? 'selected' : ''}}value="S">Sim</option>
+                    <label for="admin">Admin</label>
+                    <select name="admin" id="admin" class="form-control">
+                        <option {{ (old('admin') && old('admin')) == 'N' ? 'selected' : ''}} value="N">Não</option>
+                        <option {{ (old('admin') && old('admin') == 'S' ? 'selected' : '')}} {{(!old('admin') ? 'selected' : '')}} value="S">Sim</option>
                     </select>
                 </div>
-
-                <div class="form-group">
-                        <label for="admin">Admin</label>
-                        <select name="admin" id="admin" class="form-control">
-                            <option {{ (old('admin') && old('admin')) == 'N' ? 'selected' : ''}} value="N">Não</option>
-                            <option {{ (old('admin') && old('admin') == 'S' ? 'selected' : '')}} {{(!old('admin') ? 'selected' : '')}} value="S">Sim</option>
-                        </select>
-                    </div>
 
                 <div class="form-group">
                     <label for="descricao">Senha</label>
@@ -65,7 +58,7 @@
 
     </modal>
     <modal nome="editar" titulo="Editar">
-            <formulario id="formEditar" css="" :action=' "/admin/usuarios/" + $store.state.item.id' method="put" enctype="" token="{{ csrf_token() }}">
+            <formulario id="formEditar" css="" :action=' "/admin/adm/" + $store.state.item.id' method="put" enctype="" token="{{ csrf_token() }}">
                 <div class="form-group">
                     <label for="titulo">Nome</label>
                     <input type="text" class="form-control" id="nome" v-model="$store.state.item.name" name="name" placeholder="Nome">
@@ -76,23 +69,15 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="autor">Autor</label>
-                    <select name="autor" id="autor" class="form-control" v-model="$store.state.item.autor">
+                    <label for="admin">Admin</label>
+                    <select name="admin" id="admin" class="form-control" v-model="$store.state.item.admin">
                         <option value="N">Não</option>
                         <option value="S">Sim</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                        <label for="admin">Admin</label>
-                        <select name="admin" id="admin" class="form-control" v-model="$store.state.item.admin">
-                            <option value="N">Não</option>
-                            <option value="S">Sim</option>
-                        </select>
-                    </div>
-
-                <div class="form-group">
-                    <label for="descricao">Senha</label>
+                    <label for="descricao">E-mail</label>
                     <input type="password" class="form-control" id="password" name="password">
                 </div>
 
